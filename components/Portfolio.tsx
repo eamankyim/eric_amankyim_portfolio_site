@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, Menu, X, Sun, Moon, ExternalLink, Github, Linkedin, Mail } from 'lucide-react';
+import { Camera, Menu, Sun, Moon, ExternalLink, Github, Linkedin, Mail } from 'lucide-react';
+import SolarSystem3D from './SolarSystem3D';
 
 const Portfolio = () => {
   const [phase, setPhase] = useState('welcome');
@@ -310,7 +311,7 @@ const Portfolio = () => {
       name: 'Mobile Apps',
       size: 120,
       color: 'from-blue-400 to-cyan-400',
-      position: { x: 30, y: 40, orbit: 200 },
+      position: { x: 0, y: 0, orbit: 200 },
       projects: [
         {
           title: "Fitness Tracker App",
@@ -333,7 +334,7 @@ const Portfolio = () => {
       name: 'Web Apps',
       size: 140,
       color: 'from-purple-400 to-pink-400',
-      position: { x: 70, y: 20, orbit: 280 },
+      position: { x: 0, y: 0, orbit: 200 },
       projects: [
         {
           title: "E-Commerce Platform",
@@ -363,7 +364,7 @@ const Portfolio = () => {
       name: 'UX Research',
       size: 100,
       color: 'from-green-400 to-teal-400',
-      position: { x: 80, y: 70, orbit: 320 },
+      position: { x: 0, y: 0, orbit: 200 },
       projects: [
         {
           title: "Banking App UX Study",
@@ -386,7 +387,7 @@ const Portfolio = () => {
       name: 'UI Designs',
       size: 110,
       color: 'from-orange-400 to-red-400',
-      position: { x: 20, y: 80, orbit: 240 },
+      position: { x: 0, y: 0, orbit: 200 },
       projects: [
         {
           title: "Travel App Interface",
@@ -416,7 +417,7 @@ const Portfolio = () => {
       name: 'Integrations',
       size: 90,
       color: 'from-indigo-400 to-purple-400',
-      position: { x: 15, y: 25, orbit: 180 },
+      position: { x: 0, y: 0, orbit: 200 },
       projects: [
         {
           title: "Payment Gateway Integration",
@@ -439,7 +440,7 @@ const Portfolio = () => {
       name: 'Writeups',
       size: 80,
       color: 'from-yellow-400 to-orange-400',
-      position: { x: 60, y: 85, orbit: 160 },
+      position: { x: 0, y: 0, orbit: 200 },
       projects: [
         {
           title: "Design System Documentation",
@@ -474,7 +475,7 @@ const Portfolio = () => {
   if (phase === 'welcome') {
     return (
       <div className="fixed inset-0 bg-gradient-to-b from-indigo-950 via-purple-950 to-black overflow-hidden">
-        <div className="relative z-10 h-full flex items-center justify-center px-6">
+        <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-16 animate-fadeInUp">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-8 leading-tight">
@@ -520,267 +521,161 @@ const Portfolio = () => {
     };
 
     return (
-      <div className="fixed inset-0 bg-black overflow-hidden">
-        <canvas
-          ref={journeyCanvasRef}
-          className="absolute inset-0 w-full h-full"
-        />
-        
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-center text-white">
-            <div className="mb-8">
-              <div className="w-32 h-32 mx-auto border-4 border-purple-500 rounded-full flex items-center justify-center relative">
-                <div 
-                  className="absolute inset-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-300"
-                  style={{ 
-                    clipPath: `polygon(0 0, ${journeyProgress * 100}% 0, ${journeyProgress * 100}% 100%, 0 100%)` 
-                  }}
-                />
-                <span className="relative z-10 text-2xl font-bold">
-                  {Math.round(journeyProgress * 100)}%
-                </span>
+      <div className="w-full h-screen">
+        <SolarSystem3D 
+          planets={planets} 
+          onPlanetClick={setSelectedPlanet}
+        >
+          <canvas
+            ref={journeyCanvasRef}
+            className="absolute inset-0 w-full h-full"
+          />
+          
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="text-center text-white">
+              <div className="mb-8">
+                <div className="w-32 h-32 mx-auto border-4 border-purple-500 rounded-full flex items-center justify-center relative">
+                  <div 
+                    className="absolute inset-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-300"
+                    style={{ 
+                      clipPath: `polygon(0 0, ${journeyProgress * 100}% 0, ${journeyProgress * 100}% 100%, 0 100%)` 
+                    }}
+                  />
+                  <span className="relative z-10 text-2xl font-bold">
+                    {Math.round(journeyProgress * 100)}%
+                  </span>
+                </div>
               </div>
+              
+              <h2 className="text-2xl md:text-3xl font-light animate-pulse">
+                {getJourneyText()}
+              </h2>
             </div>
-            
-            <h2 className="text-2xl md:text-3xl font-light animate-pulse">
-              {getJourneyText()}
-            </h2>
           </div>
-        </div>
+        </SolarSystem3D>
       </div>
     );
   }
 
   // Main Portfolio (after journey)
   return (
-    <div className={`min-h-screen transition-all duration-1000 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
-      {/* Canvas Background */}
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 z-0 pointer-events-none animate-fadeIn"
-        style={{ filter: 'blur(0.5px)' }}
-      />
-
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 p-6 animate-fadeInDown">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-              <Camera className="w-6 h-6 text-white" />
-            </div>
-            <div className="hidden md:block">
-              <h5 className="font-light">
-                <span className="opacity-60">yourname</span>
-                <span className="mx-2 opacity-40">/</span>
-                <span>your full name</span>
-              </h5>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 rounded-full hover:bg-opacity-20 hover:bg-white transition-all"
-            >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-            
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-full hover:bg-opacity-20 hover:bg-white transition-all"
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Menu Overlay */}
-      <div className={`fixed inset-0 z-30 transition-all duration-500 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-        <div className={`absolute inset-0 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} bg-opacity-95 backdrop-blur-lg`}>
-          <div className="h-full flex items-center justify-center">
-            <nav className="text-center">
-              <ul className="space-y-8">
-                {['Home', 'Work', 'About', 'Contact'].map((item, index) => (
-                  <li key={item} style={{ animationDelay: `${index * 0.1}s` }} 
-                      className={`text-6xl md:text-8xl font-light hover:text-blue-500 transition-colors cursor-pointer ${isMenuOpen ? 'animate-fadeInUp' : ''}`}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              
-              <div className="mt-16 flex justify-center space-x-8">
-                <a href="#" className="flex items-center space-x-2 hover:text-blue-500 transition-colors">
-                  <ExternalLink className="w-4 h-4" />
-                  <span>Instagram</span>
-                </a>
-                <a href="#" className="flex items-center space-x-2 hover:text-blue-500 transition-colors">
-                  <Github className="w-4 h-4" />
-                  <span>GitHub</span>
-                </a>
-                <a href="#" className="flex items-center space-x-2 hover:text-blue-500 transition-colors">
-                  <Linkedin className="w-4 h-4" />
-                  <span>LinkedIn</span>
-                </a>
+    <section className="min-h-screen flex items-center justify-center">
+      <div className="w-full h-screen">
+        <SolarSystem3D 
+          planets={planets} 
+          onPlanetClick={setSelectedPlanet}
+        >
+          {/* Header */}
+          <header className="absolute top-0 left-0 right-0 z-40 p-6 animate-fadeInDown pointer-events-auto">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <Camera className="w-6 h-6 text-white" />
+                </div>
+                <div className="hidden md:block">
+                  <h5 className="font-light text-white">
+                    <span className="opacity-60">yourname</span>
+                    <span className="mx-2 opacity-40">/</span>
+                    <span>Eric Amankyim</span>
+                  </h5>
+                </div>
               </div>
-            </nav>
-          </div>
-        </div>
-      </div>
+              
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="p-2 rounded-full hover:bg-opacity-20 hover:bg-white transition-all"
+                >
+                  {isMenuOpen ? <span className="text-white text-2xl">×</span> : <Menu className="w-6 h-6" />}
+                </button>
+              </div>
+            </div>
+          </header>
 
-      {/* Main Content */}
-      <main className="relative z-10">
-        {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center px-6">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-light leading-tight mb-8 animate-fadeInUp">
-              Welcome to my <span className="font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Universe</span>
-              <br />
-              <span className="opacity-80">I'm your creative</span> <span className="font-bold">Navigator</span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl font-light opacity-80 mb-12 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-              You've successfully traveled through the cosmos
-              <br />
-              Now explore the worlds I've created
-            </p>
+          {/* Menu Overlay */}
+          <div className={`absolute inset-0 z-30 transition-all duration-500 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'} pointer-events-auto`}>
+            <div className={`absolute inset-0 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} bg-opacity-95 backdrop-blur-lg`}>
+              <div className="h-full flex items-center justify-center">
+                <nav className="text-center">
+                  <ul className="space-y-8">
+                    {['Home', 'Work', 'About', 'Contact'].map((item, index) => (
+                      <li key={item} style={{ animationDelay: `${index * 0.1}s` }} 
+                          className={`text-6xl md:text-8xl font-light text-white hover:text-blue-500 transition-colors cursor-pointer ${isMenuOpen ? 'animate-fadeInUp' : ''}`}>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div className="mt-16 flex justify-center space-x-8">
+                    <a href="#" className="flex items-center space-x-2 text-white hover:text-blue-500 transition-colors">
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Instagram</span>
+                    </a>
+                    <a href="#" className="flex items-center space-x-2 text-white hover:text-blue-500 transition-colors">
+                      <Github className="w-4 h-4" />
+                      <span>GitHub</span>
+                    </a>
+                    <a href="#" className="flex items-center space-x-2 text-white hover:text-blue-500 transition-colors">
+                      <Linkedin className="w-4 h-4" />
+                      <span>LinkedIn</span>
+                    </a>
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content Overlay */}
+          <div className="absolute inset-0 flex flex-col items-center text-center text-white z-10 pointer-events-none pt-20">
+            <div className="animate-fadeInUp">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-light leading-tight mb-8">
+                Welcome to my <span className="font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Universe</span>
+                <br />
+                <span className="opacity-80">I'm your creative</span> <span className="font-bold">Navigator</span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl font-light opacity-80 mb-12" style={{ animationDelay: '0.2s' }}>
+                You've successfully traveled through the cosmos
+                <br />
+                Now explore the worlds I've created
+              </p>
+            </div>
             
             <div className="animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
-              <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full text-white font-medium hover:shadow-lg hover:scale-105 transition-all">
-                Explore My Worlds
-              </button>
+              <h2 className="text-3xl md:text-4xl font-light mb-6">
+                Explore My <span className="font-bold">Universe</span>
+              </h2>
+              <p className="text-lg opacity-80 mb-8">
+                Click on any planet to explore its projects
+              </p>
             </div>
-          </div>
-        </section>
-
-        {/* Solar System Projects Section */}
-        <section className="py-20 px-6 min-h-screen flex items-center">
-          <div className="max-w-7xl mx-auto w-full">
-            <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
-              Explore My <span className="font-bold">Universe</span>
-            </h2>
             
-            <div className="relative w-full h-screen max-h-[800px]">
-              {/* Central Sun */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 rounded-full shadow-2xl flex items-center justify-center">
-                <div className="w-24 h-24 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-full animate-pulse">
-                  <div className="w-full h-full rounded-full bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-spin" style={{ animationDuration: '8s' }}></div>
-                </div>
-              </div>
-
-              {/* Planets */}
-              {planets.map((planet, index) => (
-                <div
-                  key={planet.id}
-                  className="absolute animate-orbit cursor-pointer group"
-                  style={{
-                    left: `${planet.position.x}%`,
-                    top: `${planet.position.y}%`,
-                    animationDuration: `${20 + index * 10}s`,
-                    animationDelay: `${index * -3}s`,
-                    transformOrigin: `${50 - planet.position.x}vw ${50 - planet.position.y}vh`
-                  }}
-                  onClick={() => setSelectedPlanet(planet)}
+            <div className="animate-fadeInUp absolute bottom-20 text-center" style={{ animationDelay: '0.6s' }}>
+              <div className="flex flex-wrap justify-center gap-6">
+                <a 
+                  href="mailto:your@email.com"
+                  className="flex items-center space-x-3 px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors pointer-events-auto"
                 >
-                  {/* Planet with 3D effect */}
-                  <div
-                    className={`relative bg-gradient-to-br ${planet.color} rounded-full shadow-2xl group-hover:scale-110 transition-all duration-300 group-hover:shadow-3xl`}
-                    style={{ 
-                      width: `${planet.size}px`, 
-                      height: `${planet.size}px`,
-                      boxShadow: 'inset -20px -20px 50px rgba(0,0,0,0.3), 0 0 50px rgba(255,255,255,0.1)'
-                    }}
-                  >
-                    {/* Planet surface details */}
-                    <div className="absolute inset-0 rounded-full opacity-30">
-                      <div className="absolute top-2 left-4 w-8 h-8 bg-white bg-opacity-20 rounded-full"></div>
-                      <div className="absolute bottom-6 right-2 w-4 h-4 bg-black bg-opacity-20 rounded-full"></div>
-                      <div className="absolute top-1/2 left-1/4 w-6 h-6 bg-white bg-opacity-10 rounded-full"></div>
-                    </div>
-                    
-                    {/* Glow effect */}
-                    <div 
-                      className={`absolute inset-0 rounded-full bg-gradient-to-br ${planet.color} opacity-0 group-hover:opacity-50 transition-opacity duration-300 blur-sm scale-150`}
-                    ></div>
-
-                    {/* Planet rings (for some planets) */}
-                    {(planet.id === 'web' || planet.id === 'integrations') && (
-                      <div className="absolute inset-0 rounded-full border-2 border-white border-opacity-30 scale-150 animate-spin" style={{ animationDuration: '15s' }}></div>
-                    )}
-                  </div>
-
-                  {/* Planet label */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-sm font-medium whitespace-nowrap bg-black bg-opacity-50 px-3 py-1 rounded-full backdrop-blur-sm">
-                      {planet.name}
-                    </p>
-                    <p className="text-xs opacity-60 mt-1">
-                      {planet.projects.length} project{planet.projects.length !== 1 ? 's' : ''}
-                    </p>
-                  </div>
-
-                  {/* Orbit path hint */}
-                  <div 
-                    className="absolute border border-white border-opacity-10 rounded-full pointer-events-none opacity-0 group-hover:opacity-30 transition-opacity duration-300"
-                    style={{
-                      width: `${planet.orbit * 2}px`,
-                      height: `${planet.orbit * 2}px`,
-                      left: `${-planet.orbit + planet.size/2}px`,
-                      top: `${-planet.orbit + planet.size/2}px`,
-                    }}
-                  ></div>
-                </div>
-              ))}
-
-              {/* Instructions */}
-              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center opacity-60">
-                <p className="text-lg">Click on any planet to explore its projects</p>
-                <div className="flex items-center justify-center mt-2 space-x-2">
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
+                  <Mail className="w-5 h-5" />
+                  <span>Start Mission</span>
+                </a>
+                
+                <a 
+                  href="#"
+                  className="flex items-center space-x-3 px-6 py-3 border border-white rounded-full hover:bg-white hover:text-black transition-colors pointer-events-auto"
+                >
+                  <Github className="w-5 h-5" />
+                  <span>Code Galaxy</span>
+                </a>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section className="py-20 px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-light mb-8">
-              Ready for another <span className="font-bold">Journey?</span>
-            </h2>
             
-            <p className="text-xl opacity-80 mb-12">
-              Let's travel together through the universe of possibilities
-            </p>
-            
-            <div className="flex flex-wrap justify-center gap-6">
-              <a 
-                href="mailto:your@email.com"
-                className="flex items-center space-x-3 px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
-              >
-                <Mail className="w-5 h-5" />
-                <span>Start Mission</span>
-              </a>
-              
-              <a 
-                href="#"
-                className="flex items-center space-x-3 px-6 py-3 border border-current rounded-full hover:bg-current hover:text-white transition-colors"
-              >
-                <Github className="w-5 h-5" />
-                <span>Code Galaxy</span>
-              </a>
+            <div className="animate-fadeInUp absolute bottom-8 text-center opacity-60" style={{ animationDelay: '0.8s' }}>
+              <p>Designed and coded in a distant galaxy © 2024</p>
             </div>
           </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="py-8 px-6 text-center opacity-60">
-          <p>Designed and coded in a distant galaxy © 2024</p>
-        </footer>
-      </main>
+        </SolarSystem3D>
+      </div>
 
       {/* Planet Project Gallery Modal */}
       {selectedPlanet && (
@@ -805,7 +700,7 @@ const Portfolio = () => {
                 onClick={() => setSelectedPlanet(null)}
                 className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
               >
-                <X className="w-6 h-6 text-white" />
+                <span className="text-white text-2xl">×</span>
               </button>
             </div>
 
@@ -864,7 +759,7 @@ const Portfolio = () => {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
